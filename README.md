@@ -30,3 +30,4 @@ You can also set islamic dates to arabic locale by using this line:
 ```
 [newCalendar setIslamicDatesInArabicLocale:YES];
 ```
+Currently, it's just displaying date. I'll add selection of dates soon.
