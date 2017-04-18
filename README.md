@@ -1,7 +1,7 @@
 # BSIslamicCalendar
 It can show Georgian and Islamic dates in calendar.  
 
-![alt tag](https://cloud.githubusercontent.com/assets/16186934/24908561/e4246344-1ed9-11e7-8bfe-8120568a6a60.png)
+![alt tag](https://cloud.githubusercontent.com/assets/16186934/25127517/9283fb82-244f-11e7-9b8b-38058479c244.png)
 
 ## How To Get Started
 Download the project and drag files of BSIslamicCalendar in you project. Don't forgot to import
@@ -30,4 +30,11 @@ You can also set islamic dates to arabic locale by using this line:
 ```
 [newCalendar setIslamicDatesInArabicLocale:YES];
 ```
-Currently, it's just displaying date. I'll add selection of dates soon.
+## UPDATE
+Implement the delegate to get selected dates. 
+```
+-(BOOL)islamicCalendar:(BSIslamicCalendar*)calendar shouldSelectDate:(NSDate*)date;
+-(void)islamicCalendar:(BSIslamicCalendar*)calendar dateSelected:(NSDate*)date withSelectionArray:(NSArray*)selectionArry;
+```
+
+Happy Codding!!!1
