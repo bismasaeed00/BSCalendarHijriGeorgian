@@ -23,10 +23,10 @@
     UIColor *dateTextColor;
     UIColor *daysNameColor;
     UIColor *dateBGColor;
-    UIColor *dateOutlineColor;
-    UIColor *selectedDateTextColor;
+   // UIColor *dateOutlineColor;
+    UIColor *selectedDateBGColor;
     UIColor *currentDateTextColor;
-    UIColor *currentDateBGColor;
+   // UIColor *currentDateBGColor;
     
     UIButton *btnNext;
     UIButton *btnPrevious;
@@ -35,6 +35,8 @@
     BOOL isShortInitials;
     BOOL isIslamicMonth;
     BOOL isArabicLocale;
+    
+    NSMutableArray *selectionArry;
     
 }
 -(id)init{
@@ -116,9 +118,7 @@
     dateTextColor=[UIColor whiteColor];
     dateBGColor=[UIColor lightGrayColor];
     daysNameColor=[UIColor blackColor];
-    selectedDateTextColor=[UIColor greenColor];
-    dateOutlineColor=[UIColor clearColor];
-    currentDateBGColor=[UIColor lightGrayColor];
+    selectedDateBGColor=[UIColor magentaColor];
     currentDateTextColor=[UIColor blueColor];
     
     calForDate = [NSDate date];
@@ -137,12 +137,12 @@
     
     rowCount=7;
     
+    selectionArry=[[NSMutableArray alloc] init];
+    
 }
 -(void)layoutSubviews{
     
     [super layoutSubviews];
-    
-    [self setUpCellSize];
     [self setUpIndexs:0];
 }
 #pragma mark CollectionView
@@ -160,12 +160,42 @@
     return cell;
 }
 
-
+-(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    
+    if (indexPath.item>7 && indexPath.item>=startIndex && datesArry.count>indexPath.item-startIndex) {
+    
+    NSDate *date=[datesArry objectAtIndex:indexPath.item-startIndex];
+    
+        if ([self.delegate respondsToSelector:@selector(islamicCalendar:shouldSelectDate:)]) {
+        
+            if ([self.delegate islamicCalendar:self shouldSelectDate:date]) {
+                
+                [self updateSelectionForDate:date];
+                [self.delegate islamicCalendar:self dateSelected:date withSelectionArray:selectionArry];
+            }
+            
+        }else{
+            
+            [self updateSelectionForDate:date];
+        }
+        
+    }
+    
+}
+-(void)updateSelectionForDate:(NSDate*)date{
+    
+    if ([selectionArry containsObject:date]) {
+        
+        [selectionArry removeObject:date];
+    }else{
+        [selectionArry addObject:date];
+    }
+    
+    [collectionVew reloadData];
+}
 -(void)configureCellLabels:(UILabel*)titelLbl detailLabel:(UILabel *)detailLbl atIndexPath:(NSIndexPath*)indexPath{
 
     UICollectionViewFlowLayout *flowLayout=(UICollectionViewFlowLayout*)[collectionVew collectionViewLayout];
-    
-   // detailLbl.backgroundColor=dateBGColor;
     
     if (indexPath.item<7) {
     
@@ -239,16 +269,23 @@
             if ([self compareDate:date withDate:[NSDate date]]) {
                 
                 titelLbl.textColor=currentDateTextColor;
-                titelLbl.superview.backgroundColor=currentDateBGColor;
+                //titelLbl.superview.backgroundColor=currentDateBGColor;
                 
                 detailLbl.textColor=currentDateTextColor;
-                //detailLbl.backgroundColor=currentDateBGColor;
                 
             }else{
                 titelLbl.textColor=dateTextColor;
                 detailLbl.textColor=dateTextColor;
             }
             
+            if ([selectionArry containsObject:date]) {
+                
+                titelLbl.superview.backgroundColor=selectedDateBGColor;
+                
+            }else{
+                
+                titelLbl.superview.backgroundColor=dateBGColor;
+            }
             
             titelLbl.text=[self getGregorianDayFromDate:date];
             detailLbl.text=[self getIslamicDayFromDate:date];
@@ -261,26 +298,6 @@
         
         
     }
-    
-}
--(void)setUpCellSize{
-    
-//    CGSize screenSize=[UIScreen mainScreen].bounds.size;
-//    
-//    UICollectionViewFlowLayout *flowLayout=(UICollectionViewFlowLayout*)[coll collectionViewLayout];
-//    
-//    float height=_CalView.frame.size.height-45;
-//    if (screenSize.height==667) {
-//        
-//        height=height-1;
-//    }
-//    
-//    _contentHeight.constant=_CalView.frame.size.height+310;
-//    [self.view layoutIfNeeded];
-//    
-//    flowLayout.itemSize=CGSizeMake((screenSize.width-(_leadingSpace.constant+_trailingSpace.constant))/7,height/rowCount);
-//    
-//    [_collectionVew reloadData];
     
 }
 
@@ -303,7 +320,6 @@
         [components setYear:components.year-1];
         
     }
-    
     
     calForDate=[gregorian dateFromComponents:components];
     
@@ -334,13 +350,6 @@
         }
         
         lblMonth.text=[[dateFormatter stringFromDate:firstDate] uppercaseString];
-        
-       // NSCalendar *islamicCalander = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierIslamicUmmAlQura];
-       // [dateFormatter setCalendar:islamicCalander];
-        //[dateFormatter setDateFormat:@"MMMM YYYY"];
-        
-       // _lblIslamicYear.text=[[dateFormatter stringFromDate:firstDate] uppercaseString];
-        
         
         components=[gregorian components:(NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear | NSCalendarUnitEra | NSCalendarUnitWeekday) fromDate:firstDate];
         startIndex = (((components.weekday + 5) % 7) + 1)+6;
@@ -379,14 +388,6 @@
     
     NSCalendar *islamicCalander = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierIslamicUmmAlQura];
     NSDateComponents *comp = [islamicCalander components:(NSCalendarUnitDay) fromDate:date];
-    
-//    if(comp.day==1) {
-//        
-//        NSDateFormatter *dateFormater=[[NSDateFormatter alloc] init];
-//        [dateFormater setTimeZone:[NSTimeZone systemTimeZone]];
-//        [dateFormater setDateFormat:@"EEEE"];
-//        
-//    }
     
     NSString *retStr=[NSString stringWithFormat:@"%li",(long)comp.day];
     
@@ -436,10 +437,12 @@
 
 -(void)previousBtnPressed:(UIButton*)btn{
     
+    [selectionArry removeAllObjects];
     [self setUpIndexs:-1];
 }
 -(void)nextBtnPressed:(UIButton*)btn{
     
+    [selectionArry removeAllObjects];
     [self setUpIndexs:+1];
 }
 
@@ -476,9 +479,9 @@
     daysNameColor=color;
     [collectionVew reloadData];
 }
--(void)setSelectedDateTextColor:(UIColor*)color{
+-(void)setSelectedDateBGColor:(UIColor*)color{
     
-    selectedDateTextColor=color;
+    selectedDateBGColor=color;
     [collectionVew reloadData];
 }
 -(void)setCurrentDateTextColor:(UIColor*)color{
@@ -486,9 +489,9 @@
     currentDateTextColor=color;
     [collectionVew reloadData];
 }
--(void)setCurrentDateBGColor:(UIColor*)color{
+
+-(NSArray*)getSelectedDates{
     
-    currentDateBGColor=color;
-    [collectionVew reloadData];
+    return selectionArry;
 }
 @end

@@ -19,6 +19,7 @@
     [super viewDidLoad];
     
     BSIslamicCalendar *newCalendar=[[BSIslamicCalendar alloc] initWithFrame:CGRectMake(10, 50, 355, 355)];
+    newCalendar.delegate=self;
     [self.view addSubview:newCalendar];
     
     [newCalendar setIslamicDatesInArabicLocale:YES];
@@ -26,9 +27,21 @@
 }
 
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+#pragma mark - Calendar Delegate
+-(BOOL)islamicCalendar:(BSIslamicCalendar *)calendar shouldSelectDate:(NSDate *)date{
+    
+    // e.g. Don't select if it's today
+    if ([calendar compareDate:date withDate:[NSDate date]]) {
+        
+        return NO;
+    }else{
+        
+        return YES;
+    }
+}
+-(void)islamicCalendar:(BSIslamicCalendar *)calendar dateSelected:(NSDate *)date withSelectionArray:(NSArray *)selectionArry{
+    
+    NSLog(@"selections: %@",selectionArry);
 }
 
 

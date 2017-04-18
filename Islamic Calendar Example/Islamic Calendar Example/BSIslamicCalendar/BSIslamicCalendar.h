@@ -8,7 +8,18 @@
 
 #import <UIKit/UIKit.h>
 
+@class BSIslamicCalendar;
+
+@protocol BSIslamicCalendarDelegate <NSObject>
+
+-(BOOL)islamicCalendar:(BSIslamicCalendar*)calendar shouldSelectDate:(NSDate*)date;
+-(void)islamicCalendar:(BSIslamicCalendar*)calendar dateSelected:(NSDate*)date withSelectionArray:(NSArray*)selectionArry;
+
+@end
+
 @interface BSIslamicCalendar : UIView<UICollectionViewDelegate,UICollectionViewDataSource>
+
+@property (nonatomic,weak) id<BSIslamicCalendarDelegate> delegate;
 
 #pragma mark - Initializers
 -(id)init;
@@ -19,12 +30,16 @@
 -(void)setShowIslamicMonth:(BOOL)isIslamic;
 -(void)setIslamicDatesInArabicLocale:(BOOL)isArabic;
 
+
+-(NSArray*)getSelectedDates;
+-(BOOL)compareDate:(NSDate*)date1 withDate:(NSDate*)date2;
+
 #pragma mark - Set Colors
 -(void)setDateTextColor:(UIColor*)color;
 -(void)setDateBGColor:(UIColor*)color;
 -(void)setDaysNameColor:(UIColor*)color;
--(void)setSelectedDateTextColor:(UIColor*)color;
+-(void)setSelectedDateBGColor:(UIColor*)color;
 -(void)setCurrentDateTextColor:(UIColor*)color;
--(void)setCurrentDateBGColor:(UIColor*)color;
+//-(void)setCurrentDateBGColor:(UIColor*)color;
 
 @end
