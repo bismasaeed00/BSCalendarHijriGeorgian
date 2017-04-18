@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "BSIslamicCalendar.h"
 
-@interface ViewController : UIViewController
+@interface ViewController : UIViewController<BSIslamicCalendarDelegate>
 
 
 @end
