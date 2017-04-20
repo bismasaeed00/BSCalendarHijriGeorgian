@@ -23,10 +23,8 @@
     UIColor *dateTextColor;
     UIColor *daysNameColor;
     UIColor *dateBGColor;
-   // UIColor *dateOutlineColor;
     UIColor *selectedDateBGColor;
     UIColor *currentDateTextColor;
-   // UIColor *currentDateBGColor;
     
     UIButton *btnNext;
     UIButton *btnPrevious;
@@ -269,8 +267,6 @@
             if ([self compareDate:date withDate:[NSDate date]]) {
                 
                 titelLbl.textColor=currentDateTextColor;
-                //titelLbl.superview.backgroundColor=currentDateBGColor;
-                
                 detailLbl.textColor=currentDateTextColor;
                 
             }else{

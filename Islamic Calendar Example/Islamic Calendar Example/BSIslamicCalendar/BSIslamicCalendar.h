@@ -40,6 +40,5 @@
 -(void)setDaysNameColor:(UIColor*)color;
 -(void)setSelectedDateBGColor:(UIColor*)color;
 -(void)setCurrentDateTextColor:(UIColor*)color;
-//-(void)setCurrentDateBGColor:(UIColor*)color;
 
 @end
