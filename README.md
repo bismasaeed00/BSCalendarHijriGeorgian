@@ -22,9 +22,8 @@ All the text and background colors can be customized
 -(void)setDateTextColor:(UIColor*)color;
 -(void)setDateBGColor:(UIColor*)color;
 -(void)setDaysNameColor:(UIColor*)color;
--(void)setSelectedDateTextColor:(UIColor*)color;
+-(void)setSelectedDateBGColor:(UIColor*)color;
 -(void)setCurrentDateTextColor:(UIColor*)color;
--(void)setCurrentDateBGColor:(UIColor*)color;
 ```
 You can also set islamic dates to arabic locale by using this line:
 ```
