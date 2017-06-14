@@ -1,4 +1,4 @@
-# BSIslamicCalendar
+# BSCalendarHijriGeorgian
 It can show Georgian and Islamic dates in calendar.  
 
 ![alt tag](https://cloud.githubusercontent.com/assets/16186934/25127517/9283fb82-244f-11e7-9b8b-38058479c244.png)
